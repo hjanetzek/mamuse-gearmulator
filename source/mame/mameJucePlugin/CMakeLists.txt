@@ -31,6 +31,11 @@ target_compile_definitions(mameJucePlugin PRIVATE MAME_MACHINE="tx81z")
 foreach(format VST3 CLAP LV2 Standalone)
 	if(TARGET mameJucePlugin_${format})
 		set_target_properties(mameJucePlugin_${format} PROPERTIES INSTALL_RPATH "$ORIGIN" BUILD_WITH_INSTALL_RPATH ON)
+		# the plugin links libstdc++ statically while the MAME library uses the shared one. Exported, the static
+		# copy's symbols would be bound by the MAME library too, mixing both copies
+		if(UNIX AND NOT APPLE)
+			target_link_options(mameJucePlugin_${format} PRIVATE "LINKER:--exclude-libs,libstdc++.a:libgcc.a:libgcc_eh.a")
+		endif()
 		add_custom_command(TARGET mameJucePlugin_${format} PRE_LINK
 			COMMAND ${CMAKE_COMMAND} -E make_directory "$<TARGET_FILE_DIR:mameJucePlugin_${format}>"
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different "${MAME_PLUGIN_LIBRARY}" "$<TARGET_FILE_DIR:mameJucePlugin_${format}>")
