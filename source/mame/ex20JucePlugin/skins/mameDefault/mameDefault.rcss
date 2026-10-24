@@ -1,0 +1,18 @@
+/* the EX-20 layout is 1301 x 480 at its natural size */
+body
+{
+	left: 0dp;
+	top: 0dp;
+	width: 1301dp;
+	height: 480dp;
+	background-color: #1c1c1c;
+}
+
+#panel
+{
+	position: absolute;
+	left: 0dp;
+	top: 0dp;
+	width: 100%;
+	height: 100%;
+}

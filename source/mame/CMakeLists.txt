@@ -21,5 +21,7 @@ set_target_properties(mamePluginApi PROPERTIES
 add_subdirectory(mameLib)
 
 if(${CMAKE_PROJECT_NAME}_BUILD_JUCEPLUGIN)
-	add_subdirectory(mameJucePlugin)
+	include(mameJucePlugin/mamePlugin.cmake)
+	add_subdirectory(tx81zJucePlugin)
+	add_subdirectory(ex20JucePlugin)
 endif()
