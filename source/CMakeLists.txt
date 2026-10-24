@@ -7,6 +7,7 @@ option(${CMAKE_PROJECT_NAME}_SYNTH_XENIA "Build Xenia" on)
 option(${CMAKE_PROJECT_NAME}_SYNTH_NODALRED2X "Build NodalRed2x" on)
 option(${CMAKE_PROJECT_NAME}_SYNTH_JE8086 "Build JE-8086" on)
 option(${CMAKE_PROJECT_NAME}_SYNTH_88EMU "Build 88Emu" on)
+option(${CMAKE_PROJECT_NAME}_SYNTH_MAME "Build machines emulated by MAME, needs MAME_PLUGIN_LIBRARY" off)
 option(${CMAKE_PROJECT_NAME}_COMPONENT_DSPBRIDGE "Build the DSPBridge server" on)
 
 # ----------------- Add our cmake scripts to IDE
@@ -80,6 +81,10 @@ add_subdirectory(axel)
 add_subdirectory(waldi)
 add_subdirectory(claudia)
 add_subdirectory(ronaldo)
+
+if(${CMAKE_PROJECT_NAME}_SYNTH_MAME)
+	add_subdirectory(mame)
+endif()
 
 # ----------------- Installer
 

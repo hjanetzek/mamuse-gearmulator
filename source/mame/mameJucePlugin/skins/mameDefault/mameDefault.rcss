@@ -1,0 +1,26 @@
+body
+{
+	left: 0dp;
+	top: 0dp;
+	width: 800dp;
+	height: 240dp;
+	background-color: #1c1c1c;
+}
+
+.title
+{
+	position: absolute;
+	left: 40dp;
+	top: 40dp;
+	font-size: 64dp;
+	color: #d0d0d0;
+}
+
+.machine
+{
+	position: absolute;
+	left: 40dp;
+	top: 140dp;
+	font-size: 32dp;
+	color: #a0a0a0;
+}

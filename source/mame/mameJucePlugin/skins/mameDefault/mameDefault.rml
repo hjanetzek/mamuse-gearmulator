@@ -1,0 +1,11 @@
+<rml>
+	<head>
+		<link type="text/rcss" href="tus_default.rcss"/>
+		<link type="text/rcss" href="tus_juceskin.rcss"/>
+		<link type="text/rcss" href="mameDefault.rcss"/>
+	</head>
+	<body id="Root" rootScale="1">
+		<div class="title">MAME</div>
+		<div class="machine">TX81Z FM Tone Generator</div>
+	</body>
+</rml>
