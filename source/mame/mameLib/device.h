@@ -2,6 +2,7 @@
 
 #include <array>
 #include <cstdint>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -14,10 +15,13 @@ namespace mameLib
 	// A machine emulated by MAME. DeviceCreateParams::romName is the MAME machine name, e.g. "tx81z".
 	// The emulation runs on a thread of its own inside MAME, ahead of the host by the extra latency the plugin asks for
 	// plus a small margin, so process() never waits for it unless rendering offline
+	class Panel;
+
 	class Device : public synthLib::Device
 	{
 	public:
-		explicit Device(const synthLib::DeviceCreateParams& _params);
+		// the panel, if any, gets each instance of the machine attached
+		explicit Device(const synthLib::DeviceCreateParams& _params, std::shared_ptr<Panel> _panel = {});
 		~Device() override;
 
 		float getSamplerate() const override { return m_samplerate; }
@@ -59,6 +63,7 @@ namespace mameLib
 		float m_samplerate = 48000.0f;
 		bool m_offline = false;
 		mp_instance* m_instance = nullptr;
+		std::shared_ptr<Panel> m_panel;
 		std::string m_error;
 		uint32_t m_latency = 0;		// what the instance was last set to
 

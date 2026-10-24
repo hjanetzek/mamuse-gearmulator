@@ -5,7 +5,7 @@
 		<link type="text/rcss" href="mameDefault.rcss"/>
 	</head>
 	<body id="Root" rootScale="1">
-		<div class="title">MAME</div>
-		<div class="machine">TX81Z FM Tone Generator</div>
+		<!-- the machine's front panel, drawn by MAME from its layout -->
+		<canvas id="panel"/>
 	</body>
 </rml>

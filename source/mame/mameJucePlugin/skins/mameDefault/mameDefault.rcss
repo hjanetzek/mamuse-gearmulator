@@ -1,26 +1,18 @@
+/* the TX81Z layout is 735 x 68 at its natural size */
 body
 {
 	left: 0dp;
 	top: 0dp;
-	width: 800dp;
-	height: 240dp;
+	width: 1470dp;
+	height: 136dp;
 	background-color: #1c1c1c;
 }
 
-.title
+#panel
 {
 	position: absolute;
-	left: 40dp;
-	top: 40dp;
-	font-size: 64dp;
-	color: #d0d0d0;
-}
-
-.machine
-{
-	position: absolute;
-	left: 40dp;
-	top: 140dp;
-	font-size: 32dp;
-	color: #a0a0a0;
+	left: 0dp;
+	top: 0dp;
+	width: 100%;
+	height: 100%;
 }

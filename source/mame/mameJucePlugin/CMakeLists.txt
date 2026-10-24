@@ -4,6 +4,8 @@ project(mameJucePlugin VERSION ${CMAKE_PROJECT_VERSION})
 
 set(SOURCES
 	mameController.cpp mameController.h
+	mameEditor.cpp mameEditor.h
+	mamePanel.cpp mamePanel.h
 	mamePluginProcessor.cpp mamePluginProcessor.h
 	parameterDescriptions_mame.json
 

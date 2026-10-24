@@ -1,12 +1,14 @@
 #include "mamePluginProcessor.h"
 
 #include "mameController.h"
+#include "mameEditor.h"
 
 #include "jucePluginEditorLib/pluginEditor.h"
 #include "jucePluginEditorLib/pluginEditorState.h"
 #include "jucePluginEditorLib/pluginEntry.h"
 
 #include "mameLib/device.h"
+#include "mameLib/panel.h"
 
 #include "skins.h"
 
@@ -20,17 +22,18 @@ namespace mameJucePlugin
 		Processor(BusesProperties()
 			.withOutput("Out", juce::AudioChannelSet::stereo(), true)
 			, {}, pluginLib::initProcessorProperties())
+		, m_panel(std::make_shared<mameLib::Panel>())
 	{
 	}
 
 	jucePluginEditorLib::PluginEditorState* AudioPluginAudioProcessor::createEditorState()
 	{
-		return new jucePluginEditorLib::PluginEditorStateT<jucePluginEditorLib::Editor>(*this, g_includedSkins);
+		return new jucePluginEditorLib::PluginEditorStateT<Editor>(*this, g_includedSkins);
 	}
 
 	synthLib::Device* AudioPluginAudioProcessor::newDevice(const synthLib::DeviceCreateParams& _params)
 	{
-		return new mameLib::Device(_params);
+		return new mameLib::Device(_params, m_panel);
 	}
 
 	void AudioPluginAudioProcessor::getRemoteDeviceParams(synthLib::DeviceCreateParams& _params) const

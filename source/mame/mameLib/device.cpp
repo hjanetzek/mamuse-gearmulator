@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cstring>
 
+#include "panel.h"
 #include "settings.h"
 
 #include "synthLib/deviceException.h"
@@ -46,7 +47,10 @@ namespace mameLib
 		constexpr uint8_t g_stateVersion = 1;
 	}
 
-	Device::Device(const synthLib::DeviceCreateParams& _params) : synthLib::Device(_params), m_machine(_params.romName)
+	Device::Device(const synthLib::DeviceCreateParams& _params, std::shared_ptr<Panel> _panel)
+		: synthLib::Device(_params)
+		, m_machine(_params.romName)
+		, m_panel(std::move(_panel))
 	{
 		const auto settings = Settings::load();
 
@@ -233,6 +237,8 @@ namespace mameLib
 		}
 
 		mp_set_offline(m_instance, m_offline ? 1 : 0);
+		if (m_panel)
+			m_panel->attach(m_instance);
 		return true;
 	}
 
@@ -240,6 +246,8 @@ namespace mameLib
 	{
 		if (!m_instance)
 			return;
+		if (m_panel)
+			m_panel->detach();
 		mp_destroy(m_instance);
 		m_instance = nullptr;
 	}
