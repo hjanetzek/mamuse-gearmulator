@@ -12,7 +12,8 @@
 	url = https://github.com/dsp56300/mc68k.git
 [submodule "source/3rdparty/clap-juce-extensions"]
 	path = source/3rdparty/clap-juce-extensions
-	url = https://github.com/dsp56300/clap-juce-extensions.git
+	url = https://github.com/hjanetzek/clap-juce-extensions.git
+	branch = mame
 [submodule "source/3rdparty/RmlUi"]
 	path = source/3rdparty/RmlUi
 	url = https://github.com/dsp56300/RmlUi.git
