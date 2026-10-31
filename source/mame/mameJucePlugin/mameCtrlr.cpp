@@ -60,16 +60,32 @@ namespace mameJucePlugin
 
 	void Ctrlr::showEditor()
 	{
+		bool fit = false;
+
 		if (!m_window)
 		{
 			m_window = std::make_unique<Window>(juce::String(JucePlugin_Name) + " - CtrlrX");
 			m_window->setContentOwned(m_ctrlr->createEditorIfNeeded(), true);
-			m_window->centreWithSize(m_window->getWidth(), m_window->getHeight());
+			fit = true;
 		}
 
 		// after the editor, CtrlrX expects it to be there when a panel is opened
 		if (m_ctrlr->getManager().getNumPanels() == 0)
+		{
 			openDefaultPanel();
+			fit = true;
+		}
+
+		// the editor shows only the panel (CTRLR_EMBEDDED), the window gets the panel's size
+		if (fit)
+		{
+			auto* panel = m_ctrlr->getManager().getActivePanel();
+			auto* panelEditor = panel ? panel->getEditor(false) : nullptr;
+			const auto area = panelEditor ? juce::Rectangle<int>::fromString(panelEditor->getProperty(Ids::uiPanelCanvasRectangle).toString()) : juce::Rectangle<int>();
+			if (!area.isEmpty())
+				m_window->setContentComponentSize(area.getWidth(), area.getHeight());
+			m_window->centreWithSize(m_window->getWidth(), m_window->getHeight());
+		}
 
 		m_window->setVisible(true);
 		m_window->toFront(true);
