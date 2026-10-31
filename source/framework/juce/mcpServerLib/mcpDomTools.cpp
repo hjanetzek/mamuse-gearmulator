@@ -12,6 +12,7 @@
 #include "RmlUi/Core/Input.h"
 
 #include <juce_events/juce_events.h>
+#include <juce_gui_basics/juce_gui_basics.h>
 #include <chrono>
 #include <future>
 #include <thread>
@@ -173,6 +174,32 @@ namespace mcpServer
 			});
 
 			return future.get();
+		}
+
+		// the visible top-level window whose name contains _title, for windows that aren't RmlUi, e.g. the ones a plugin
+		// opens besides its editor
+		juce::Component* findWindow(const juce::String& _title)
+		{
+			auto& desktop = juce::Desktop::getInstance();
+			for (int i = 0; i < desktop.getNumComponents(); ++i)
+			{
+				auto* c = desktop.getComponent(i);
+				if (c && c->isVisible() && c->getName().containsIgnoreCase(_title))
+					return c;
+			}
+			return nullptr;
+		}
+
+		mcpServer::JsonValue windowNames()
+		{
+			auto names = mcpServer::JsonValue::array();
+			auto& desktop = juce::Desktop::getInstance();
+			for (int i = 0; i < desktop.getNumComponents(); ++i)
+			{
+				if (auto* c = desktop.getComponent(i))
+					names.append(mcpServer::JsonValue::fromString(c->getName().toStdString()));
+			}
+			return names;
 		}
 
 		int parseMouseButton(const mcpServer::JsonValue& _params)
@@ -823,6 +850,95 @@ namespace mcpServer
 
 				auto result = mcpServer::JsonValue::object();
 				result.set("path", mcpServer::JsonValue::fromString(*path));
+				return result;
+			};
+			_server.registerTool(std::move(tool));
+		}
+
+		// window_screenshot - capture another top-level window
+		{
+			mcpServer::ToolDef tool;
+			tool.name = "window_screenshot";
+			tool.description = "Capture a top-level window other than the editor, e.g. one a plugin opens, as a PNG in the temp directory and return the path. Without a matching window, the names of all windows are returned.";
+			tool.inputSchema.addProperty("title", "string", "Part of the window's title", true);
+			tool.handler = [](const mcpServer::JsonValue& _params) -> mcpServer::JsonValue
+			{
+				const auto title = _params.get("title").getString();
+
+				return runOnMessageThread([&]() -> mcpServer::JsonValue
+				{
+					auto result = mcpServer::JsonValue::object();
+
+					auto* window = findWindow(title);
+					if (!window)
+					{
+						result.set("windows", windowNames());
+						return result;
+					}
+
+					const auto image = window->createComponentSnapshot(window->getLocalBounds());
+					const auto file = juce::File::getSpecialLocation(juce::File::tempDirectory).getChildFile("gearmulator_window.png");
+					file.deleteFile();
+
+					juce::PNGImageFormat png;
+					if (auto stream = file.createOutputStream(); !stream || !png.writeImageToStream(image, *stream))
+						throw std::runtime_error("Failed to write the screenshot");
+
+					result.set("path", mcpServer::JsonValue::fromString(file.getFullPathName().toStdString()));
+					result.set("width", mcpServer::JsonValue::fromInt(window->getWidth()));
+					result.set("height", mcpServer::JsonValue::fromInt(window->getHeight()));
+					return result;
+				});
+			};
+			_server.registerTool(std::move(tool));
+		}
+
+		// window_click - click into another top-level window
+		{
+			mcpServer::ToolDef tool;
+			tool.name = "window_click";
+			tool.description = "Click into a top-level window other than the editor, at coordinates relative to the window, like window_screenshot shows it. The events go through the window's peer as real mouse events.";
+			tool.inputSchema.addProperty("title", "string", "Part of the window's title", true);
+			tool.inputSchema.addIntProperty("x", "X coordinate in the window", true);
+			tool.inputSchema.addIntProperty("y", "Y coordinate in the window", true);
+			tool.inputSchema.addProperty("button", "string", "Mouse button: 'left' (default), 'right', or 'middle'", false);
+			tool.inputSchema.addIntProperty("holdMs", "How long the button stays down (default 80)", false, 0, 5000);
+			tool.handler = [](const mcpServer::JsonValue& _params) -> mcpServer::JsonValue
+			{
+				const auto title = _params.get("title").getString();
+				const auto x = static_cast<float>(_params.get("x").getInt());
+				const auto y = static_cast<float>(_params.get("y").getInt());
+				const auto button = parseMouseButton(_params);
+				const auto holdMs = _params.hasProperty("holdMs") ? _params.get("holdMs").getInt() : g_defaultClickHoldMs;
+
+				const auto buttonMods = button == 1 ? juce::ModifierKeys::rightButtonModifier
+					: button == 2 ? juce::ModifierKeys::middleButtonModifier : juce::ModifierKeys::leftButtonModifier;
+
+				const auto send = [&](const juce::ModifierKeys& _mods)
+				{
+					return runOnMessageThread([&]() -> bool
+					{
+						auto* window = findWindow(title);
+						auto* peer = window ? window->getPeer() : nullptr;
+						if (!peer)
+							return false;
+						peer->handleMouseEvent(juce::MouseInputSource::InputSourceType::mouse, { x, y }, _mods,
+							juce::MouseInputSource::defaultPressure, juce::MouseInputSource::defaultOrientation, juce::Time::currentTimeMillis());
+						return true;
+					});
+				};
+
+				if (!send(juce::ModifierKeys()) || !send(juce::ModifierKeys(buttonMods)))
+				{
+					auto result = mcpServer::JsonValue::object();
+					result.set("windows", windowNames());
+					return result;
+				}
+				std::this_thread::sleep_for(std::chrono::milliseconds(holdMs));
+				send(juce::ModifierKeys());
+
+				auto result = mcpServer::JsonValue::object();
+				result.set("success", mcpServer::JsonValue::fromBool(true));
 				return result;
 			};
 			_server.registerTool(std::move(tool));
