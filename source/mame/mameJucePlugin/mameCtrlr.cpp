@@ -60,15 +60,16 @@ namespace mameJucePlugin
 
 	void Ctrlr::showEditor()
 	{
-		if (m_ctrlr->getManager().getNumPanels() == 0)
-			openDefaultPanel();
-
 		if (!m_window)
 		{
 			m_window = std::make_unique<Window>(juce::String(JucePlugin_Name) + " - CtrlrX");
 			m_window->setContentOwned(m_ctrlr->createEditorIfNeeded(), true);
 			m_window->centreWithSize(m_window->getWidth(), m_window->getHeight());
 		}
+
+		// after the editor, CtrlrX expects it to be there when a panel is opened
+		if (m_ctrlr->getManager().getNumPanels() == 0)
+			openDefaultPanel();
 
 		m_window->setVisible(true);
 		m_window->toFront(true);
