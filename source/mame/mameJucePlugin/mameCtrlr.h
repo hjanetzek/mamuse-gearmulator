@@ -18,7 +18,8 @@ namespace mameJucePlugin
 	class AudioPluginAudioProcessor;
 
 	// Runs CtrlrX panels for the machine (see docs/ctrlrx.md of muse). The panels' MIDI goes to the machine and the
-	// machine's MIDI to the panels. Everything here runs on the message thread
+	// machine's MIDI to the panels, CtrlrX doesn't open MIDI devices (CTRLR_EMBEDDED). Everything here runs on the
+	// message thread
 	class Ctrlr : juce::Timer
 	{
 	public:
@@ -41,7 +42,6 @@ namespace mameJucePlugin
 	private:
 		void timerCallback() override;
 		void openDefaultPanel() const;
-		void setMidiOptions() const;
 
 		AudioPluginAudioProcessor& m_processor;
 		std::unique_ptr<CtrlrProcessor> m_ctrlr;

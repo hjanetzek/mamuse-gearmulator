@@ -93,7 +93,6 @@ namespace mameJucePlugin
 			manager.removePanel(manager.getPanel(0)->getEditor(true));
 
 		m_ctrlr->setStateInformation(_data.data(), static_cast<int>(_data.size()));
-		setMidiOptions();
 	}
 
 	void Ctrlr::timerCallback()
@@ -145,21 +144,5 @@ namespace mameJucePlugin
 
 		files.sort();
 		m_ctrlr->openFileFromCli(files.getFirst());
-		setMidiOptions();
-	}
-
-	void Ctrlr::setMidiOptions() const
-	{
-		// the panels talk to the machine through the plugin, not through MIDI devices
-		auto& manager = m_ctrlr->getManager();
-
-		for (int i = 0; i < manager.getNumPanels(); ++i)
-		{
-			auto* panel = manager.getPanel(i);
-			panel->setProperty(Ids::panelMidiInputFromHost, true);
-			panel->setProperty(Ids::panelMidiOutputToHost, true);
-			panel->setProperty(Ids::panelMidiThruH2H, false);
-			panel->setProperty(Ids::panelMidiThruH2D, false);
-		}
 	}
 }
