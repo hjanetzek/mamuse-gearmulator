@@ -19,6 +19,11 @@ macro(createMamePlugin targetName productName machine plugin4CCSynth plugin4CCFX
 		skins/mameDefault/mameDefault.rcss
 	)
 
+	# CtrlrX panels, see MAME_CTRLR_DIR
+	if(TARGET ctrlrLib)
+		list(APPEND SOURCES ${MAME_JUCE_PLUGIN_DIR}/mameCtrlr.cpp ${MAME_JUCE_PLUGIN_DIR}/mameCtrlr.h)
+	endif()
+
 	set(ASSETS "${MAME_JUCE_PLUGIN_DIR}/parameterDescriptions_mame.json")
 
 	addSkin("${productName}" "mameDefault" "skins/mameDefault" "mameDefault.rml")
@@ -33,6 +38,11 @@ macro(createMamePlugin targetName productName machine plugin4CCSynth plugin4CCFX
 		if(TARGET ${variant})
 			# the machine this plugin runs
 			target_compile_definitions(${variant} PRIVATE MAME_MACHINE="${machine}")
+
+			if(TARGET ctrlrLib)
+				target_link_libraries(${variant} PRIVATE ctrlrLib)
+				target_compile_definitions(${variant} PRIVATE MAME_WITH_CTRLR=1)
+			endif()
 		endif()
 
 		# the MAME library goes next to each plugin binary, which finds it there. It is copied before linking because

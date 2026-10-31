@@ -20,6 +20,17 @@ set_target_properties(mamePluginApi PROPERTIES
 
 add_subdirectory(mameLib)
 
+# CtrlrX runs panels for the machines inside the plugins, see docs/ctrlrx.md of muse
+set(MAME_CTRLR_DIR "" CACHE PATH "CtrlrX fork with the muse/ folder, to build the plugins with panels")
+
+if(MAME_CTRLR_DIR AND ${CMAKE_PROJECT_NAME}_BUILD_JUCEPLUGIN)
+	# the modules CtrlrX needs beyond those of the other plugins. Its panels open modal windows from Lua
+	target_link_libraries(juce_plugin_modules PRIVATE juce::juce_gui_extra juce::juce_product_unlocking)
+	target_compile_definitions(juce_plugin_modules PUBLIC JUCE_MODAL_LOOPS_PERMITTED=1 JUCE_MODULE_AVAILABLE_juce_product_unlocking=1)
+	set(CTRLR_JUCE_MODULES_TARGET juce_plugin_modules)
+	add_subdirectory(${MAME_CTRLR_DIR}/muse ctrlrx)
+endif()
+
 if(${CMAKE_PROJECT_NAME}_BUILD_JUCEPLUGIN)
 	include(mameJucePlugin/mamePlugin.cmake)
 	add_subdirectory(tx81zJucePlugin)

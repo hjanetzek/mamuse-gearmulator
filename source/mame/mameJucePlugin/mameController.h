@@ -15,6 +15,7 @@ namespace mameJucePlugin
 
 		void sendParameterChange(const pluginLib::Parameter& _parameter, pluginLib::ParamValue _value, pluginLib::Parameter::Origin _origin) override {}
 		bool parseSysexMessage(const pluginLib::SysEx&, synthLib::MidiEventSource) override { return false; }
+		bool parseMidiMessage(const synthLib::SMidiEvent& _e) override;
 		void onStateLoaded() override {}
 	};
 }
