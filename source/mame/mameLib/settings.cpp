@@ -43,7 +43,6 @@ namespace mameLib
 
 		Settings result;
 		result.datapath = dataDir;
-		result.rompath = dataDir + sep + "roms";
 
 		std::ifstream file(configDir + sep + "mame-plugin.ini");
 		std::string line;

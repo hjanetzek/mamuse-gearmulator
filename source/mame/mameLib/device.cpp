@@ -54,11 +54,13 @@ namespace mameLib
 	{
 		const auto settings = Settings::load();
 
-		// ROMs may also be put into the plugin's data folder
-		m_rompath = settings.rompath;
+		// the machine's folder first, then the configured ones and the plugin's data folder
+		m_datapath = settings.datapath + "/" + m_machine;
+		m_rompath = m_datapath + "/roms";
+		if (!settings.rompath.empty())
+			m_rompath += ";" + settings.rompath;
 		if (!_params.homePath.empty())
 			m_rompath += ";" + _params.homePath + "/roms";
-		m_datapath = settings.datapath + "/" + m_machine;
 
 		const auto host = _params.hostSamplerate;
 		const bool hostSupported = std::find(std::begin(g_samplerates), std::end(g_samplerates), host) != std::end(g_samplerates);

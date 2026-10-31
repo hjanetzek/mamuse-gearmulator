@@ -9,8 +9,8 @@ namespace mameLib
 	// CLAP plugin of the MAME tree, so both find the same ROMs
 	struct Settings
 	{
-		std::string rompath;	// ';'-separated
-		std::string datapath;	// NVRAM files in <datapath>/<machine>/nvram are the template for new instances
+		std::string rompath;	// ';'-separated, searched after <datapath>/<machine>/roms
+		std::string datapath;	// a folder per machine: roms, NVRAM templates in nvram, panels for CtrlrX
 
 		static Settings load();
 	};
