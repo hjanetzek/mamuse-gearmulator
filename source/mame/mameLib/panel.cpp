@@ -43,9 +43,12 @@ namespace mameLib
 		std::lock_guard lock(m_mutex);
 		if (!m_instance || !m_width || !m_height)
 			return false;
-		_rgba.resize(static_cast<size_t>(m_width) * m_height * 4);
-		const auto serial = mp_panel_frame(m_instance, _rgba.data(), m_width, m_height, m_serial);
-		if (serial == m_serial)
+		// the library only sends frames that show something new; a new buffer needs the current one
+		const auto size = static_cast<size_t>(m_width) * m_height * 4;
+		const auto last = _rgba.size() == size ? m_serial : 0;
+		_rgba.resize(size);
+		const auto serial = mp_panel_frame(m_instance, _rgba.data(), m_width, m_height, last);
+		if (serial == last)
 			return false;
 		m_serial = serial;
 		return true;
