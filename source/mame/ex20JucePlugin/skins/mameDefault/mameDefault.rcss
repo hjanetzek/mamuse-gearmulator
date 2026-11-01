@@ -1,4 +1,4 @@
-/* the EX-20 layout is 1301 x 480 at its natural size */
+/* the EX-20 layout is 1406 x 441 at its natural size */
 
 /* fixed window mode: the window can't be resized, its size follows the UI scale (the plugin menu's, or uiscale in
    mame-plugin.ini) */
@@ -6,8 +6,8 @@ body
 {
 	left: 0dp;
 	top: 0dp;
-	width: 1301dp;
-	height: 480dp;
+	width: 1406dp;
+	height: 441dp;
 	background-color: #1c1c1c;
 }
 
