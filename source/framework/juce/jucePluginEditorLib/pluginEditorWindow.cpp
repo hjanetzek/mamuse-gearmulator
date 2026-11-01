@@ -66,6 +66,23 @@ void EditorWindow::resized()
 	const auto w = getWidth();
 	const auto h = getHeight();
 
+	// in the fixed window mode only the GUI scale sets the size: one asked for otherwise, e.g. by a host, goes back to
+	// the size at the current scale, later, as a resize from in here would be undone by the one in progress
+	if (const auto* rml = getRmlComponent(); rml && rml->isFixedWindowMode())
+	{
+		const auto size = getSizeForScale(static_cast<float>(m_config.getDoubleValue("scale", 100)));
+		if (std::abs(size.x - w) > 1 || std::abs(size.y - h) > 1)
+		{
+			juce::Component::SafePointer<EditorWindow> self(this);
+			juce::MessageManager::callAsync([self, size]
+			{
+				if (self)
+					self->setSize(size.x, size.y);
+			});
+			return;
+		}
+	}
+
 	// in the free window mode a new size is more or less room, the scale stays
 	if (isFreeWindowMode())
 	{
@@ -224,8 +241,11 @@ void EditorWindow::setUiRoot(juce::Component* _component)
 
 	addAndMakeVisible(_component);
 
-	setResizable(true, true);
-	setConstrainer(&m_sizeConstrainer);
+	// a skin in the fixed window mode keeps the window at its size at the GUI scale
+	const auto* rml = getRmlComponent();
+	const bool fixed = rml && rml->isFixedWindowMode();
+	setResizable(!fixed, !fixed);
+	setConstrainer(fixed ? nullptr : &m_sizeConstrainer);
 }
 
 void EditorWindow::updateSizeConstrainer()

@@ -149,6 +149,8 @@ namespace juceRmlUi
 		// <body windowMode="free">: the body follows the window instead of the window following the body, so a
 		// larger window means more room. The scale is set from outside instead of derived from the window width.
 		bool isFreeWindowMode() const { return m_freeWindowMode; }
+		// windowMode="fixed" on the body: the window can't be resized, its size follows the GUI scale only
+		bool isFixedWindowMode() const { return m_fixedWindowMode; }
 		void setFreeWindowScale(float _scale);
 		// Window size limits from min-width, min-height, max-width and max-height of the body, in the units of
 		// getDocumentSize(). A limit that is not given is 0 for the minimum and FLT_MAX for the maximum.
@@ -254,6 +256,7 @@ namespace juceRmlUi
 		float m_documentDpRatio = 1.0f;
 
 		bool m_freeWindowMode = false;
+		bool m_fixedWindowMode = false;
 		float m_freeWindowScale = 1.0f;
 		Rml::Vector2f m_minimumDocumentSize{0, 0};
 		Rml::Vector2f m_maximumDocumentSize{FLT_MAX, FLT_MAX};

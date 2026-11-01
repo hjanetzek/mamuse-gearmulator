@@ -1499,6 +1499,7 @@ namespace juceRmlUi
 
 				m_documentDpRatio = m_rmlContext->GetDensityIndependentPixelRatio();
 				m_freeWindowMode = m_document->GetAttribute<Rml::String>("windowMode", "") == "free";
+				m_fixedWindowMode = m_document->GetAttribute<Rml::String>("windowMode", "") == "fixed";
 
 				// in the free window mode the body follows the window, its size says nothing yet
 				const Rml::Vector2f s = m_freeWindowMode
