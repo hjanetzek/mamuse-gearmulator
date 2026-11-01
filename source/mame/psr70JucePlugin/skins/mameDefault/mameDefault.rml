@@ -1,0 +1,11 @@
+<rml>
+	<head>
+		<link type="text/rcss" href="tus_default.rcss"/>
+		<link type="text/rcss" href="tus_juceskin.rcss"/>
+		<link type="text/rcss" href="mameDefault.rcss"/>
+	</head>
+	<body id="Root" rootScale="1">
+		<!-- the machine's front panel, drawn by MAME from its layout -->
+		<canvas id="panel"/>
+	</body>
+</rml>
