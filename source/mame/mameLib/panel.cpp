@@ -1,5 +1,7 @@
 #include "panel.h"
 
+#include <algorithm>
+
 namespace mameLib
 {
 	void Panel::attach(mp_instance* _instance)
@@ -8,6 +10,19 @@ namespace mameLib
 		m_instance = _instance;
 		m_serial = 0;
 		++m_generation;
+
+		// the same for every instance of the machine
+		if (m_instance)
+		{
+			m_fieldNames.clear();
+			const auto count = mp_field_count(m_instance);
+			for (uint32_t i = 0; i < count; ++i)
+			{
+				mp_field field{};
+				mp_field_info(m_instance, i, &field);
+				m_fieldNames.emplace_back(field.name);
+			}
+		}
 		if (m_instance && m_width && m_height)
 			mp_panel_set_size(m_instance, m_width, m_height);
 	}
@@ -112,5 +127,30 @@ namespace mameLib
 		std::lock_guard lock(m_mutex);
 		if (m_instance)
 			mp_layout_pointer(m_instance, _id, _x, _y, _pressed ? 1 : 0);
+	}
+
+	std::vector<std::string> Panel::getFieldNames()
+	{
+		std::lock_guard lock(m_mutex);
+		return m_fieldNames;
+	}
+
+	void Panel::setField(const std::string& _name, const int32_t _value)
+	{
+		std::lock_guard lock(m_mutex);
+		if (!m_instance)
+			return;
+		const auto it = std::find(m_fieldNames.begin(), m_fieldNames.end(), _name);
+		if (it != m_fieldNames.end())
+			mp_set_field(m_instance, static_cast<uint32_t>(it - m_fieldNames.begin()), _value);
+	}
+
+	uint64_t Panel::getFieldValues(const uint64_t _serial, std::vector<int32_t>& _values)
+	{
+		std::lock_guard lock(m_mutex);
+		if (!m_instance)
+			return _serial;
+		_values.resize(m_fieldNames.size());
+		return mp_field_values(m_instance, _serial, _values.data(), static_cast<uint32_t>(_values.size()));
 	}
 }

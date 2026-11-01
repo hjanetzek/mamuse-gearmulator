@@ -8,13 +8,21 @@
 set(MAME_JUCE_PLUGIN_DIR ${CMAKE_CURRENT_LIST_DIR})
 
 macro(createMamePlugin targetName productName machine plugin4CCSynth plugin4CCFX)
+	# the parameters, the machine's adjusters: a product's own parameterDescriptions_mame.json (written by mpctest with
+	# MPCTEST_FIELDS), or none
+	if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/parameterDescriptions_mame.json)
+		set(parameterDescriptions ${CMAKE_CURRENT_SOURCE_DIR}/parameterDescriptions_mame.json)
+	else()
+		set(parameterDescriptions ${MAME_JUCE_PLUGIN_DIR}/parameterDescriptions_mame.json)
+	endif()
+
 	set(SOURCES
 		${MAME_JUCE_PLUGIN_DIR}/mameController.cpp ${MAME_JUCE_PLUGIN_DIR}/mameController.h
 		${MAME_JUCE_PLUGIN_DIR}/mameEditor.cpp ${MAME_JUCE_PLUGIN_DIR}/mameEditor.h
 		${MAME_JUCE_PLUGIN_DIR}/mameLayout.cpp ${MAME_JUCE_PLUGIN_DIR}/mameLayout.h
 		${MAME_JUCE_PLUGIN_DIR}/mamePanel.cpp ${MAME_JUCE_PLUGIN_DIR}/mamePanel.h
 		${MAME_JUCE_PLUGIN_DIR}/mamePluginProcessor.cpp ${MAME_JUCE_PLUGIN_DIR}/mamePluginProcessor.h
-		${MAME_JUCE_PLUGIN_DIR}/parameterDescriptions_mame.json
+		${parameterDescriptions}
 
 		skins/mameDefault/mameDefault.rml
 		skins/mameDefault/mameDefault.rcss
@@ -25,7 +33,7 @@ macro(createMamePlugin targetName productName machine plugin4CCSynth plugin4CCFX
 		list(APPEND SOURCES ${MAME_JUCE_PLUGIN_DIR}/mameCtrlr.cpp ${MAME_JUCE_PLUGIN_DIR}/mameCtrlr.h)
 	endif()
 
-	set(ASSETS "${MAME_JUCE_PLUGIN_DIR}/parameterDescriptions_mame.json")
+	set(ASSETS "${parameterDescriptions}")
 
 	addSkin("${productName}" "mameDefault" "skins/mameDefault" "mameDefault.rml")
 

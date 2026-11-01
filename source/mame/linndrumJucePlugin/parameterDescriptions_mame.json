@@ -1,0 +1,56 @@
+{
+	"parameterdescriptiondefaults":
+	{
+		"page": 0, "class": "", "toText": {"format": "%.0f"}, "isPublic": true, "isDiscrete": false, "isBool": false, "isBipolar": false, "step": 0
+	},
+	"parameterdescriptions":
+	[
+		{"index": 0, "name": "BASS GAIN", "min": 0, "max": 100, "default": 100},
+		{"index": 1, "name": "CABASA GAIN", "min": 0, "max": 100, "default": 100},
+		{"index": 2, "name": "TAMB GAIN", "min": 0, "max": 100, "default": 100},
+		{"index": 3, "name": "HI CONGA GAIN", "min": 0, "max": 100, "default": 100},
+		{"index": 4, "name": "LO CONGA GAIN", "min": 0, "max": 100, "default": 100},
+		{"index": 5, "name": "COWBELL GAIN", "min": 0, "max": 100, "default": 100},
+		{"index": 6, "name": "CLAPS GAIN", "min": 0, "max": 100, "default": 100},
+		{"index": 7, "name": "CLICK GAIN", "min": 0, "max": 100, "default": 100},
+		{"index": 8, "name": "SNARE GAIN", "min": 0, "max": 100, "default": 100},
+		{"index": 9, "name": "SIDESTICK GAIN", "min": 0, "max": 100, "default": 100},
+		{"index": 10, "name": "HIHAT GAIN", "min": 0, "max": 100, "default": 100},
+		{"index": 11, "name": "HI TOM GAIN", "min": 0, "max": 100, "default": 100},
+		{"index": 12, "name": "MID TOM GAIN", "min": 0, "max": 100, "default": 100},
+		{"index": 13, "name": "LO TOM GAIN", "min": 0, "max": 100, "default": 100},
+		{"index": 14, "name": "RIDE GAIN", "min": 0, "max": 100, "default": 100},
+		{"index": 15, "name": "CRASH GAIN", "min": 0, "max": 100, "default": 100},
+		{"index": 16, "name": "HIHAT DECAY", "min": 0, "max": 100, "default": 50},
+		{"index": 17, "name": "TRIMMER: MUX DRUM TUNING", "min": 0, "max": 100, "default": 25},
+		{"index": 18, "name": "BASS PAN", "min": 0, "max": 100, "default": 50},
+		{"index": 19, "name": "CABASA PAN", "min": 0, "max": 100, "default": 50},
+		{"index": 20, "name": "TAMB PAN", "min": 0, "max": 100, "default": 50},
+		{"index": 21, "name": "HI CONGA PAN", "min": 0, "max": 100, "default": 50},
+		{"index": 22, "name": "LO CONGA PAN", "min": 0, "max": 100, "default": 50},
+		{"index": 23, "name": "COWBELL PAN", "min": 0, "max": 100, "default": 50},
+		{"index": 24, "name": "CLAPS PAN", "min": 0, "max": 100, "default": 50},
+		{"index": 25, "name": "CLICK PAN", "min": 0, "max": 100, "default": 50},
+		{"index": 26, "name": "SNARE PAN", "min": 0, "max": 100, "default": 50},
+		{"index": 27, "name": "SIDESTICK PAN", "min": 0, "max": 100, "default": 50},
+		{"index": 28, "name": "HIHAT PAN", "min": 0, "max": 100, "default": 50},
+		{"index": 29, "name": "HI TOM PAN", "min": 0, "max": 100, "default": 50},
+		{"index": 30, "name": "MID TOM PAN", "min": 0, "max": 100, "default": 50},
+		{"index": 31, "name": "LO TOM PAN", "min": 0, "max": 100, "default": 50},
+		{"index": 32, "name": "RIDE PAN", "min": 0, "max": 100, "default": 50},
+		{"index": 33, "name": "CRASH PAN", "min": 0, "max": 100, "default": 50},
+		{"index": 34, "name": "TEMPO", "min": 0, "max": 100, "default": 80},
+		{"index": 35, "name": "SNARE TUNING", "min": 0, "max": 100, "default": 25},
+		{"index": 36, "name": "HI TOM TUNING", "min": 0, "max": 100, "default": 60},
+		{"index": 37, "name": "MID TOM TUNING", "min": 0, "max": 100, "default": 50},
+		{"index": 38, "name": "LO TOM TUNING", "min": 0, "max": 100, "default": 40},
+		{"index": 39, "name": "HI CONGAS TUNING", "min": 0, "max": 100, "default": 52},
+		{"index": 40, "name": "LO CONGAS TUNING", "min": 0, "max": 100, "default": 40},
+		{"index": 41, "name": "MASTER VOLUME", "min": 0, "max": 100, "default": 90},
+		{"index": 42, "name": "TRIMMER: BASS CUTOFF CV OFFSET", "min": 0, "max": 100, "default": 29},
+		{"index": 43, "name": "TRIMMER: TOM/CONGA CUTOFF CV OFFSET", "min": 0, "max": 100, "default": 13}
+	],
+	"valuelists":
+	{
+	}
+}

@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <mutex>
+#include <string>
 #include <vector>
 
 #include "mame_plugin.h"
@@ -45,6 +46,13 @@ namespace mameLib
 		// pointer input in view coordinates, 0..1 across the view; pointerLeave() ends it
 		void layoutPointer(uint32_t _id, float _x, float _y, bool _pressed);
 
+		// the machine's adjusters (mp_field_* of mame_plugin.h), named as MAME names them; empty until a machine is
+		// attached
+		std::vector<std::string> getFieldNames();
+		void setField(const std::string& _name, int32_t _value);
+		// returns the values' serial, _serial if they didn't change
+		uint64_t getFieldValues(uint64_t _serial, std::vector<int32_t>& _values);
+
 	private:
 		std::mutex m_mutex;
 		mp_instance* m_instance = nullptr;
@@ -52,5 +60,6 @@ namespace mameLib
 		uint32_t m_height = 0;
 		uint64_t m_serial = 0;
 		uint32_t m_generation = 0;
+		std::vector<std::string> m_fieldNames;
 	};
 }
