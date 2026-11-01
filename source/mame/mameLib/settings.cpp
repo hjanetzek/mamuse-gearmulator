@@ -64,12 +64,16 @@ namespace mameLib
 				result.datapath = std::move(value);
 			else if (key == "layoutdev")
 				result.layoutDev = isTrue(value);
+			else if (key == "nativelayout")
+				result.nativeLayout = isTrue(value);
 		}
 
 		result.rompath = envOr("MAME_PLUGIN_ROMPATH", std::move(result.rompath));
 		result.datapath = envOr("MAME_PLUGIN_DATAPATH", std::move(result.datapath));
 		if (const char* layoutDev = std::getenv("MAME_PLUGIN_LAYOUTDEV"))
 			result.layoutDev = isTrue(layoutDev);
+		if (const char* nativeLayout = std::getenv("MAME_PLUGIN_NATIVELAYOUT"))
+			result.nativeLayout = isTrue(nativeLayout);
 		return result;
 	}
 }

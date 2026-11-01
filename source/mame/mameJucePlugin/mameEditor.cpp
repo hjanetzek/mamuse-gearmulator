@@ -1,7 +1,10 @@
 #include "mameEditor.h"
 
+#include "mameLayout.h"
 #include "mamePanel.h"
 #include "mamePluginProcessor.h"
+
+#include "mameLib/settings.h"
 
 #include "juceRmlUi/rmlElemCanvas.h"
 
@@ -14,6 +17,7 @@ namespace mameJucePlugin
 
 	Editor::~Editor()
 	{
+		m_layout.reset();
 		m_panel.reset();
 	}
 
@@ -22,6 +26,12 @@ namespace mameJucePlugin
 		jucePluginEditorLib::Editor::create();
 
 		if (auto* canvas = findChild<juceRmlUi::ElemCanvas>("panel", false))
-			m_panel.reset(new PanelView(dynamic_cast<AudioPluginAudioProcessor&>(getProcessor()).getPanel(), canvas));
+		{
+			auto& panel = dynamic_cast<AudioPluginAudioProcessor&>(getProcessor()).getPanel();
+			if (mameLib::Settings::load().nativeLayout)
+				m_layout.reset(new LayoutView(panel, canvas));
+			else
+				m_panel.reset(new PanelView(panel, canvas));
+		}
 	}
 }

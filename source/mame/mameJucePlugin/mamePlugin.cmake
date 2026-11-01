@@ -11,6 +11,7 @@ macro(createMamePlugin targetName productName machine plugin4CCSynth plugin4CCFX
 	set(SOURCES
 		${MAME_JUCE_PLUGIN_DIR}/mameController.cpp ${MAME_JUCE_PLUGIN_DIR}/mameController.h
 		${MAME_JUCE_PLUGIN_DIR}/mameEditor.cpp ${MAME_JUCE_PLUGIN_DIR}/mameEditor.h
+		${MAME_JUCE_PLUGIN_DIR}/mameLayout.cpp ${MAME_JUCE_PLUGIN_DIR}/mameLayout.h
 		${MAME_JUCE_PLUGIN_DIR}/mamePanel.cpp ${MAME_JUCE_PLUGIN_DIR}/mamePanel.h
 		${MAME_JUCE_PLUGIN_DIR}/mamePluginProcessor.cpp ${MAME_JUCE_PLUGIN_DIR}/mamePluginProcessor.h
 		${MAME_JUCE_PLUGIN_DIR}/parameterDescriptions_mame.json
