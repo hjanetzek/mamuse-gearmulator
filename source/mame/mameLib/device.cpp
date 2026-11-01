@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cstring>
 
+#include "noteMap.h"
 #include "panel.h"
 #include "settings.h"
 
@@ -228,6 +229,12 @@ namespace mameLib
 		{
 			config.nvram = _nvram.data();
 			config.nvram_size = _nvram.size();
+		}
+		const auto& noteMap = getNoteMap(m_machine);
+		if (!noteMap.empty())
+		{
+			config.note_map = noteMap.data();
+			config.note_map_size = static_cast<uint32_t>(noteMap.size());
 		}
 
 		char error[2048];

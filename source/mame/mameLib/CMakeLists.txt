@@ -6,6 +6,7 @@ add_library(mameLib STATIC)
 
 set(SOURCES
 	device.cpp device.h
+	noteMap.cpp noteMap.h
 	panel.cpp panel.h
 	settings.cpp settings.h
 )
