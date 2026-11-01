@@ -1,18 +1,23 @@
 /* the TX81Z layout is 735 x 68 at its natural size */
+
+/* free window mode: the body follows the window, the panel keeps its size at the UI scale (the plugin menu's
+   scale), centred; resizing the window gives more or less room around it */
 body
 {
 	left: 0dp;
 	top: 0dp;
-	width: 1470dp;
-	height: 136dp;
+	width: 100%;
+	height: 100%;
 	background-color: #1c1c1c;
 }
 
 #panel
 {
 	position: absolute;
-	left: 0dp;
-	top: 0dp;
-	width: 100%;
-	height: 100%;
+	left: 50%;
+	top: 50%;
+	width: 1470dp;
+	height: 136dp;
+	margin-left: -735dp;
+	margin-top: -68dp;
 }

@@ -4,7 +4,7 @@
 		<link type="text/rcss" href="tus_juceskin.rcss"/>
 		<link type="text/rcss" href="mameDefault.rcss"/>
 	</head>
-	<body id="Root" rootScale="1">
+	<body id="Root" rootScale="1" windowMode="free" windowWidth="1314" windowHeight="480">
 		<!-- the machine's front panel, drawn by MAME from its layout -->
 		<canvas id="panel"/>
 	</body>
