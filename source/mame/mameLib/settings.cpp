@@ -66,6 +66,8 @@ namespace mameLib
 				result.layoutDev = isTrue(value);
 			else if (key == "nativelayout")
 				result.nativeLayout = isTrue(value);
+			else if (key == "uiscale")
+				result.uiScale = std::atoi(value.c_str());
 		}
 
 		result.rompath = envOr("MAME_PLUGIN_ROMPATH", std::move(result.rompath));
@@ -74,6 +76,8 @@ namespace mameLib
 			result.layoutDev = isTrue(layoutDev);
 		if (const char* nativeLayout = std::getenv("MAME_PLUGIN_NATIVELAYOUT"))
 			result.nativeLayout = isTrue(nativeLayout);
+		if (const char* uiScale = std::getenv("MAME_PLUGIN_UISCALE"))
+			result.uiScale = std::atoi(uiScale);
 		return result;
 	}
 }

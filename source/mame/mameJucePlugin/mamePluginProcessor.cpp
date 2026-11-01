@@ -1,5 +1,7 @@
 #include "mamePluginProcessor.h"
 
+#include "mameLib/settings.h"
+
 #include "mameController.h"
 #include "mameEditor.h"
 
@@ -62,6 +64,10 @@ namespace mameJucePlugin
 			, {}, pluginLib::initProcessorProperties())
 		, m_panel(std::make_shared<mameLib::Panel>())
 	{
+		// one scale for all the plugins (uiscale in mame-plugin.ini), instead of each plugin's own
+		if (const auto uiScale = mameLib::Settings::load().uiScale; uiScale > 0)
+			getConfig().setValue("scale", juce::var(uiScale));
+
 #if MAME_WITH_CTRLR
 		m_ctrlr = std::make_unique<Ctrlr>(*this);
 #endif
