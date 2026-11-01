@@ -67,6 +67,14 @@ namespace mameLib
 		std::string m_error;
 		uint32_t m_latency = 0;		// what the instance was last set to
 
+		// the emulation runs ahead of the host by at least the largest block the host has asked for: a host may call
+		// with larger blocks than it announced, and frames beyond the look-ahead would come out as silence
+		uint32_t m_largestBlock = 0;
+		uint32_t m_burstLatency = 0;	// added for hosts calling several blocks in a row
+		uint64_t m_underruns = 0;		// of the instance, when last seen
+		uint64_t m_processed = 0;		// frames since the instance started
+		uint32_t targetLatency() const;
+
 		// MIDI received for the current block; SysEx is kept in m_midiIn
 		std::vector<synthLib::SMidiEvent> m_midiIn;
 		std::vector<mp_midi_event> m_events;

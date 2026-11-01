@@ -133,7 +133,12 @@ namespace mameLib
 
 	uint32_t Device::getInternalLatencyMidiToOutput() const
 	{
-		return latencyMargin(m_samplerate);
+		return targetLatency() - getExtraLatencySamples();
+	}
+
+	uint32_t Device::targetLatency() const
+	{
+		return std::max(getExtraLatencySamples(), m_largestBlock) + m_burstLatency + latencyMargin(m_samplerate);
 	}
 
 	void Device::setOffline(const bool _offline)
@@ -179,7 +184,21 @@ namespace mameLib
 		}
 
 		// the plugin's extra latency follows the host's block size
-		const auto latency = getExtraLatencySamples() + latencyMargin(m_samplerate);
+		m_largestBlock = std::max(m_largestBlock, static_cast<uint32_t>(_samples));
+
+		// a host can also call several blocks in a row without a pause, e.g. two blocks of 512 for each period of
+		// 1024 of the audio device. The emulation can't catch up in between, so the look-ahead grows by whatever it
+		// was short of, once the machine has started
+		const auto underruns = mp_underruns(m_instance);
+		if (underruns > m_underruns && !m_offline && m_processed >= static_cast<uint64_t>(m_samplerate))
+		{
+			const auto maxBurst = static_cast<uint32_t>(m_samplerate / 10);
+			m_burstLatency = std::min(maxBurst, m_burstLatency + static_cast<uint32_t>(underruns - m_underruns));
+		}
+		m_underruns = underruns;
+		m_processed += _samples;
+
+		const auto latency = targetLatency();
 		if (latency != m_latency)
 			m_latency = mp_set_latency(m_instance, latency);
 
@@ -217,7 +236,7 @@ namespace mameLib
 	bool Device::create(const float _samplerate, const std::vector<uint8_t>& _nvram)
 	{
 		m_samplerate = _samplerate;
-		m_latency = getExtraLatencySamples() + latencyMargin(_samplerate);
+		m_latency = targetLatency();
 
 		mp_config config{};
 		config.driver = m_machine.c_str();
@@ -238,6 +257,8 @@ namespace mameLib
 		}
 
 		char error[2048];
+		m_underruns = 0;
+		m_processed = 0;
 		m_instance = mp_create(&config, error, sizeof(error));
 		if (!m_instance)
 		{
