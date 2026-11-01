@@ -107,10 +107,10 @@ namespace mameLib
 		return mp_layout_screen(m_instance, _screen, _serial, &_width, &_height, _rgba.data(), _rgba.size());
 	}
 
-	void Panel::layoutInput(const uint64_t _layoutSerial, const uint32_t _item, const bool _pressed)
+	void Panel::layoutPointer(const uint32_t _id, const float _x, const float _y, const bool _pressed)
 	{
 		std::lock_guard lock(m_mutex);
 		if (m_instance)
-			mp_layout_input(m_instance, _layoutSerial, _item, _pressed ? 1 : 0);
+			mp_layout_pointer(m_instance, _id, _x, _y, _pressed ? 1 : 0);
 	}
 }

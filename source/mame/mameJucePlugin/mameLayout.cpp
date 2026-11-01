@@ -413,25 +413,11 @@ namespace mameJucePlugin
 		m_dirty = true;
 	}
 
-	int ElemLayout::clickableItemAt(const Rml::Vector2f _pos) const
+	Rml::Vector2f ElemLayout::toView(const Rml::Vector2f _pos) const
 	{
-		if (m_size.x < 1.0f || m_size.y < 1.0f || m_states.size() != m_items.size())
-			return -1;
-		const float x = _pos.x / m_size.x;
-		const float y = _pos.y / m_size.y;
-		for (size_t i = m_items.size(); i-- > 0;)
-		{
-			const auto& s = m_states[i];
-			if ((m_items[i].flags & MP_LAYOUT_CLICKABLE) && x >= s.x0 && x < s.x1 && y >= s.y0 && y < s.y1)
-				return static_cast<int>(i);
-		}
-		return -1;
-	}
-
-	void ElemLayout::press(const int _item, const bool _pressed)
-	{
-		if (_item >= 0)
-			m_panel.layoutInput(m_layoutSerial, static_cast<uint32_t>(_item), _pressed);
+		if (m_size.x < 1.0f || m_size.y < 1.0f)
+			return Rml::Vector2f(-1.0f, -1.0f);
+		return Rml::Vector2f(_pos.x / m_size.x, _pos.y / m_size.y);
 	}
 
 	LayoutView::LayoutView(mameLib::Panel& _panel, juceRmlUi::ElemCanvas* _canvas)
@@ -456,26 +442,32 @@ namespace mameJucePlugin
 		m_layout->SetProperty(Rml::PropertyId::Width, Rml::Property(100, Rml::Unit::PERCENT));
 		m_layout->SetProperty(Rml::PropertyId::Height, Rml::Property(100, Rml::Unit::PERCENT));
 
-		auto itemAt = [this](Rml::Event& _event)
+		auto pointer = [this](Rml::Event& _event)
 		{
-			const auto pos = juceRmlUi::helper::getMousePos(_event) - m_layout->GetAbsoluteOffset(Rml::BoxArea::Content);
-			return m_layout->clickableItemAt(pos);
+			const auto pos = m_layout->toView(juceRmlUi::helper::getMousePos(_event) - m_layout->GetAbsoluteOffset(Rml::BoxArea::Content));
+			m_panel.layoutPointer(0, pos.x, pos.y, m_pressed);
 		};
 
-		juceRmlUi::EventListener::Add(m_layout, Rml::EventId::Mousedown, [this, itemAt](Rml::Event& _event)
+		juceRmlUi::EventListener::Add(m_layout, Rml::EventId::Mousedown, [this, pointer](Rml::Event& _event)
 		{
 			if (juceRmlUi::helper::getMouseButton(_event) != juceRmlUi::MouseButton::Left)
 				return;
-			m_pressedItem = itemAt(_event);
-			m_layout->press(m_pressedItem, true);
+			m_pressed = true;
+			pointer(_event);
 		});
-		auto release = [this](Rml::Event&)
+		juceRmlUi::EventListener::Add(m_layout, Rml::EventId::Mouseup, [this, pointer](Rml::Event& _event)
 		{
-			m_layout->press(m_pressedItem, false);
-			m_pressedItem = -1;
-		};
-		juceRmlUi::EventListener::Add(m_layout, Rml::EventId::Mouseup, release);
-		juceRmlUi::EventListener::Add(m_layout, Rml::EventId::Mouseout, release);
+			if (juceRmlUi::helper::getMouseButton(_event) != juceRmlUi::MouseButton::Left)
+				return;
+			m_pressed = false;
+			pointer(_event);
+		});
+		juceRmlUi::EventListener::Add(m_layout, Rml::EventId::Mousemove, pointer);
+		juceRmlUi::EventListener::Add(m_layout, Rml::EventId::Mouseout, [this](Rml::Event&)
+		{
+			m_pressed = false;
+			m_panel.pointerLeave(0);
+		});
 
 		startTimerHz(g_updatesPerSecond);
 	}
@@ -485,7 +477,7 @@ namespace mameJucePlugin
 		stopTimer();
 		if (!m_layout)
 			return;
-		m_layout->press(m_pressedItem, false);
+		m_panel.pointerLeave(0);
 		if (auto* parent = m_layout->GetParentNode())
 			parent->RemoveChild(m_layout);
 	}

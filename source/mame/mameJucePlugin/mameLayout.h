@@ -40,9 +40,8 @@ namespace mameJucePlugin
 		// polls the library, returns true if the layout looks different
 		bool update();
 
-		// the topmost clickable item at a position relative to the element's content box, -1 for none
-		int clickableItemAt(Rml::Vector2f _pos) const;
-		void press(int _item, bool _pressed);
+		// a position relative to the element's content box in view coordinates, 0..1 across the view
+		Rml::Vector2f toView(Rml::Vector2f _pos) const;
 
 	private:
 		// an image as a texture: element images are RGBA as the library draws them, textures need premultiplied alpha
@@ -112,7 +111,8 @@ namespace mameJucePlugin
 		bool m_dirty = true;
 	};
 
-	// Puts an ElemLayout over the skin's panel canvas and keeps it up to date; clicks press the inputs of the items
+	// Puts an ElemLayout over the skin's panel canvas and keeps it up to date. The mouse goes to MAME in view
+	// coordinates: it presses the clickable items and drags the layout's knobs and sliders
 	class LayoutView : juce::Timer
 	{
 	public:
@@ -128,6 +128,6 @@ namespace mameJucePlugin
 		mameLib::Panel& m_panel;
 		juceRmlUi::CallbackElemInstancer m_instancer;
 		ElemLayout* m_layout = nullptr;
-		int m_pressedItem = -1;
+		bool m_pressed = false;
 	};
 }

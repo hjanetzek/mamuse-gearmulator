@@ -42,7 +42,8 @@ namespace mameLib
 		bool getElementImage(uint32_t _element, uint32_t _state, uint32_t _orientation, uint32_t _width, uint32_t _height, std::vector<uint8_t>& _rgba);
 		// returns the image's serial, _serial if it didn't change
 		uint64_t getScreenImage(uint32_t _screen, uint64_t _serial, uint32_t& _width, uint32_t& _height, std::vector<uint8_t>& _rgba);
-		void layoutInput(uint64_t _layoutSerial, uint32_t _item, bool _pressed);
+		// pointer input in view coordinates, 0..1 across the view; pointerLeave() ends it
+		void layoutPointer(uint32_t _id, float _x, float _y, bool _pressed);
 
 	private:
 		std::mutex m_mutex;
