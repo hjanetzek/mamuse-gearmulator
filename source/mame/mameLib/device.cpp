@@ -57,6 +57,7 @@ namespace mameLib
 
 		// the machine's folder first, then the configured ones and the plugin's data folder
 		m_datapath = settings.datapath + "/" + m_machine;
+		m_layoutDev = settings.layoutDev;
 		m_rompath = m_datapath + "/roms";
 		if (!settings.rompath.empty())
 			m_rompath += ";" + settings.rompath;
@@ -244,6 +245,7 @@ namespace mameLib
 		config.datapath = m_datapath.c_str();
 		config.sample_rate = static_cast<uint32_t>(_samplerate);
 		config.latency_frames = m_latency;
+		config.flags = m_layoutDev ? MP_FLAG_RELOAD_LAYOUT : 0;
 		if (!_nvram.empty())
 		{
 			config.nvram = _nvram.data();

@@ -17,6 +17,11 @@ namespace mameLib
 			return std::string(_text.substr(first, last - first + 1));
 		}
 
+		bool isTrue(const std::string_view _value)
+		{
+			return _value == "1" || _value == "yes" || _value == "true" || _value == "on";
+		}
+
 		std::string envOr(const char* _name, std::string _fallback)
 		{
 			const char* value = std::getenv(_name);
@@ -57,10 +62,14 @@ namespace mameLib
 				result.rompath = std::move(value);
 			else if (key == "datapath")
 				result.datapath = std::move(value);
+			else if (key == "layoutdev")
+				result.layoutDev = isTrue(value);
 		}
 
 		result.rompath = envOr("MAME_PLUGIN_ROMPATH", std::move(result.rompath));
 		result.datapath = envOr("MAME_PLUGIN_DATAPATH", std::move(result.datapath));
+		if (const char* layoutDev = std::getenv("MAME_PLUGIN_LAYOUTDEV"))
+			result.layoutDev = isTrue(layoutDev);
 		return result;
 	}
 }

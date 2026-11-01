@@ -60,6 +60,7 @@ namespace mameLib
 		std::string m_machine;
 		std::string m_rompath;
 		std::string m_datapath;
+		bool m_layoutDev = false;	// reload the panel's layout files when they change
 		float m_samplerate = 48000.0f;
 		bool m_offline = false;
 		mp_instance* m_instance = nullptr;
