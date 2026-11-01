@@ -58,7 +58,8 @@ namespace mameLib
 		// the machine's folder first, then the configured ones and the plugin's data folder
 		m_datapath = settings.datapath + "/" + m_machine;
 		m_layoutDev = settings.layoutDev;
-		m_rompath = m_datapath + "/roms";
+		// the machine's own ROM folder, then the one shared by all machines (parent sets, devices' ROMs)
+		m_rompath = m_datapath + "/roms;" + settings.datapath + "/roms";
 		if (!settings.rompath.empty())
 			m_rompath += ";" + settings.rompath;
 		if (!_params.homePath.empty())
