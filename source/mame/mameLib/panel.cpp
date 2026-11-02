@@ -15,12 +15,14 @@ namespace mameLib
 		if (m_instance)
 		{
 			m_fieldNames.clear();
+			m_fieldFlags.clear();
 			const auto count = mp_field_count(m_instance);
 			for (uint32_t i = 0; i < count; ++i)
 			{
 				mp_field field{};
 				mp_field_info(m_instance, i, &field);
 				m_fieldNames.emplace_back(field.name);
+				m_fieldFlags.push_back(field.flags);
 			}
 		}
 		if (m_instance && m_width && m_height)
@@ -143,6 +145,25 @@ namespace mameLib
 		const auto it = std::find(m_fieldNames.begin(), m_fieldNames.end(), _name);
 		if (it != m_fieldNames.end())
 			mp_set_field(m_instance, static_cast<uint32_t>(it - m_fieldNames.begin()), _value);
+	}
+
+	std::vector<Panel::Control> Panel::getControls()
+	{
+		std::lock_guard lock(m_mutex);
+		std::vector<Control> result;
+		if (!m_instance)
+			return result;
+		const auto count = mp_layout_control_count(m_instance);
+		for (uint32_t i = 0; i < count; ++i)
+		{
+			mp_layout_control c{};
+			if (!mp_layout_control_info(m_instance, i, &c))
+				continue;
+			const bool hasField = c.field < m_fieldNames.size();
+			result.push_back(Control{ c.kind, c.area ? c.area : "", c.knob ? c.knob : "", hasField ? m_fieldNames[c.field] : std::string(),
+				c.flags, hasField && (m_fieldFlags[c.field] & MP_FIELD_CENTERING), c.scale, c.x0, c.y0, c.x1, c.y1 });
+		}
+		return result;
 	}
 
 	uint64_t Panel::getFieldValues(const uint64_t _serial, std::vector<int32_t>& _values)

@@ -53,6 +53,21 @@ namespace mameLib
 		// returns the values' serial, _serial if they didn't change
 		uint64_t getFieldValues(uint64_t _serial, std::vector<int32_t>& _values);
 
+		// the layout's knobs, sliders and keyboards (mp_layout_control), with the name of the field, which is also the
+		// parameter's; empty until the machine runs
+		struct Control
+		{
+			uint32_t kind;
+			std::string area;
+			std::string knob;
+			std::string parameter;	// empty for a keyboard
+			uint32_t flags;
+			bool sprung;			// the field springs back to its default when let go
+			float scale;
+			float x0, y0, x1, y1;
+		};
+		std::vector<Control> getControls();
+
 	private:
 		std::mutex m_mutex;
 		mp_instance* m_instance = nullptr;
@@ -61,5 +76,6 @@ namespace mameLib
 		uint64_t m_serial = 0;
 		uint32_t m_generation = 0;
 		std::vector<std::string> m_fieldNames;
+		std::vector<uint32_t> m_fieldFlags;
 	};
 }

@@ -29,7 +29,7 @@ namespace mameJucePlugin
 		{
 			auto& panel = dynamic_cast<AudioPluginAudioProcessor&>(getProcessor()).getPanel();
 			if (mameLib::Settings::load().nativeLayout)
-				m_layout.reset(new LayoutView(panel, canvas));
+				m_layout.reset(new LayoutView(panel, getProcessor().getController(), canvas));
 			else
 				m_panel.reset(new PanelView(panel, canvas));
 		}
