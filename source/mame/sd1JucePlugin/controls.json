@@ -1,0 +1,10 @@
+{
+	"controls":
+	[
+		{"kind": "slider", "area": "slider_volume", "knob": "slider_knob_volume", "port": "panel:analog_volume", "parameter": "Volume"},
+		{"kind": "slider", "area": "slider_data_entry", "knob": "slider_knob_data_entry", "port": "panel:analog_data_entry", "parameter": "Data Entry"},
+		{"kind": "slider", "area": "wheel_pitch_bend", "knob": "wheel_knob_pitch_bend", "port": "panel:analog_pitch_bend", "parameter": "Pitch Bend", "sprung": true},
+		{"kind": "slider", "area": "wheel_mod_wheel", "knob": "wheel_knob_mod_wheel", "port": "panel:analog_mod_wheel", "parameter": "Modulation"},
+		{"kind": "keyboard", "area": "full_keyboard_key_", "knob": "", "port": "panel:key_"}
+	]
+}

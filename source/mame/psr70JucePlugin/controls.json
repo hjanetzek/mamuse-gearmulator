@@ -1,0 +1,12 @@
+{
+	"controls":
+	[
+		{"kind": "slider", "area": "", "knob": "", "port": ":MASTERVOL", "parameter": "PSR Master Volume"},
+		{"kind": "slider", "area": "", "knob": "", "port": ":RYP4_6", "parameter": "Bass Volume"},
+		{"kind": "slider", "area": "", "knob": "", "port": ":RYP4_5", "parameter": "Chord Volume"},
+		{"kind": "slider", "area": "", "knob": "", "port": ":RYP4_3", "parameter": "Rhythm Volume"},
+		{"kind": "slider", "area": "", "knob": "", "port": ":RYP4_4", "parameter": "Rhythm Tempo"},
+		{"kind": "slider", "area": "", "knob": "", "port": ":RYP4_2", "parameter": "Orchestra Volume"},
+		{"kind": "slider", "area": "", "knob": "", "port": ":RYP4_1", "parameter": "Solo Volume"}
+	]
+}

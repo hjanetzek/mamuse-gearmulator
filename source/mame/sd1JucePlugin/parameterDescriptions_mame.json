@@ -1,0 +1,16 @@
+{
+	"parameterdescriptiondefaults":
+	{
+		"page": 0, "class": "", "toText": {"format": "%.0f"}, "isPublic": true, "isDiscrete": false, "isBool": false, "isBipolar": false, "step": 0
+	},
+	"parameterdescriptions":
+	[
+		{"index": 0, "name": "Data Entry", "min": 0, "max": 1023, "default": 512},
+		{"index": 1, "name": "Modulation", "min": 0, "max": 1023, "default": 1023},
+		{"index": 2, "name": "Pitch Bend", "min": 0, "max": 1023, "default": 512},
+		{"index": 3, "name": "Volume", "min": 0, "max": 1023, "default": 1023}
+	],
+	"valuelists":
+	{
+	}
+}
